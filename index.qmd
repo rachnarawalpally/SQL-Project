@@ -1,0 +1,150 @@
+---
+title: "SQL-Project"
+execute:
+  echo: false
+---
+
+# Flying Smart in February 2019: What Delay, Weather, and Airport Data Reveal
+
+### Top Airline Delays 
+```{python}
+import pandas as pd
+df1 = pd.read_csv('data/Rawalpally_Rachna_rr1303_pro-1.csv')
+print(df1)
+```
+
+```{python}
+import plotly.express as px
+
+df_top5 = df1.sort_values("Max_Delay_Minutes", ascending=False).head(5)[::-1]
+
+# Create the horizontal bar chart
+fig = px.bar(df_top5, x="Max_Delay_Minutes", y="Airline_Name", orientation='h', title='Top 5 Airline Company Delays')
+
+# Display the chart
+fig.show()
+```
+
+Our dataset contains 17 airlines in total. Among them, the five airlines with the most extreme delays are shown in the chart above, with Envoy Air (MQ) experiencing the longest delay at over 2,000 minutes.
+
+### Top Airline Early Depatures 
+```{python}
+df2 = pd.read_csv('data/Rawalpally_Rachna_rr1303_pro-2.csv')
+print(df2)
+```
+
+The list above ranks airlines by their earliest recorded departures, from the greatest early departure to the smallest. Alaska Airlines demonstrates the most substantial early departure among the 17 carriers. In contrast, Southwest Airlines ranks last, showing minimal early departures. This is particularly interesting given that Southwest also holds the highest maximum delay in the earlier analysis, suggesting a broader pattern of operational variability.
+
+### Busiest Day to Fly 
+```{python}
+df3 = pd.read_csv('data/Rawalpally_Rachna_rr1303_pro-3.csv')
+print(df3)
+```
+
+```{python}
+order = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+df_ordered = df3.set_index("Day_of_Week").loc[order].reset_index()
+
+fig = px.line(
+    df_ordered,
+    x="Day_of_Week",
+    y="Number_of_Flights",
+    markers=True,
+    title="Weekly Flight Volume Pattern"
+)
+fig.show()
+```
+
+The data shows Thursday as the busiest travel day, which is consistent with typical flight behavior. Business travelers often return home toward the end of the workweek, while leisure travelers begin heading out for weekend plans. Flight volume stays elevated on Friday for similar reasons. The weekend itself, particularly Saturday and Sunday, shows the lowest flight activity. By Monday, traffic rises again as individuals resume work-related travel or return from weekend trips.
+
+```{python}
+df4 = pd.read_csv('data/Rawalpally_Rachna_rr1303_pro-4.csv')
+#print(df4)
+```
+
+### Airport Delays 
+```{python}
+df5 = pd.read_csv('data/Rawalpally_Rachna_rr1303_pro-5.csv')
+#print(df5)
+```
+
+```{python}
+import plotly.express as px
+
+df_sorted = df5.sort_values("Average_Delay", ascending=True)
+
+fig = px.bar(
+    df_sorted,
+    x="Average_Delay",
+    y="Airport_Name",
+    color="Average_Delay",
+    color_continuous_scale="Reds",
+    orientation="h",
+    title="Average Flight Delay by Airport"
+)
+
+fig.show()
+```
+
+This heatmap highlights the average delay per airport, showing clear differences across regions. Fargo’s Hector International Airport experienced by far the largest average delays—nearly 200 minutes, likely due to severe winter weather. Smaller northern airports such as Great Falls, North Bend/Coos Bay, and Bozeman also showed above-average delays. In contrast, major hubs like JFK and DFW demonstrated moderate delays, while airports in warmer climates such as Orlando and Phoenix experienced the lowest average delays. These patterns suggest that winter weather played a significant role in delay severity for February 2019.
+
+### Weather Delays 
+```{python}
+df6 = pd.read_csv('data/Rawalpally_Rachna_rr1303_pro-6b.csv')
+print(df6)
+```
+
+```{python}
+fig = px.pie(
+    df6,
+    names="Cancellation_Reason",
+    values="Number_of_Cancellations",
+    title="Share of Cancellation Reasons"
+)
+fig.show()
+```
+
+The pie chart reveals a clear trend in flight cancellations for February 2019. Weather-related cancellations make up the overwhelming majority (84.7%), which aligns strongly with expectations for winter travel, particularly across the Midwest, Northeast, and Mountain regions, where snowstorms, freezing rain, and low visibility are common.
+
+Carrier-related cancellations account for around 14.8%, typically caused by mechanical issues, crew limitations, or airline-level operational disruptions.
+
+A very small share (0.46%) is attributed to National Air System delays—factors such as air traffic control restrictions or system-wide flow management.
+
+```{python}
+# Sort by cancellations 
+df_top10 = df6.sort_values("Number_of_Cancellations", ascending=False).head(10)
+
+# Sort again for nicer horizontal bar ordering 
+df_top10 = df_top10.sort_values("Number_of_Cancellations", ascending=True)
+
+# create the plot
+fig = px.bar(
+    df_top10,
+    x="Number_of_Cancellations",
+    y="Airport_Name",
+    color="Cancellation_Reason",
+    orientation='h',
+    title="Top 10 Airports With Most Flight Cancellations",
+    color_discrete_sequence=px.colors.qualitative.Set2
+)
+fig.show()
+```
+
+The top four airports with the highest number of cancellations —
+Chicago O’Hare, Chicago Midway, New York LaGuardia, and Washington Reagan National — all lie in regions that experience heavy winter weather during February, including snowstorms, ice, low visibility, and freezing conditions. These factors commonly lead to runway closures, de-icing delays, and large-scale cancellations.
+
+This pattern reinforces the earlier finding from the pie chart:
+Weather is the dominant cause of cancellations in February.
+
+Even airports farther west or south (such as Seattle, Minneapolis, San Francisco, and Dallas/Fort Worth) make the list, but with fewer cancellations, often due to scattered winter systems or localized extreme weather events.
+
+### Conclusion 
+After analyzing flight performance for February 2019, several patterns emerge that can help travelers make more informed decisions.
+
+Southwest Airlines appears to be the most reliable overall, showing the fewest delays—although they rarely depart early. Alaska Airlines is a strong second choice, ranking first in early departures and among the better performers in delay times. Interestingly, some low-budget carriers such as Frontier and Spirit performed better in delay metrics than major airlines like Delta and United, challenging common assumptions about airline punctuality.
+
+Travel patterns also show that Thursdays and Fridays are the busiest days, likely due to work-related travel and weekend trips. Travelers flying on these days should plan to arrive earlier than usual. In contrast, weekends—especially Saturday and Sunday—tend to be less crowded.
+
+Because inclement winter weather is a major driver of cancellations in February, passengers may benefit from flying through larger airports, which are typically better equipped to handle snow, ice, and operational disruptions. Cancellations are overwhelmingly caused by weather, particularly in the Midwest and Northeast, so travelers flying in or out of these regions should expect potential delays.
+
+Overall, the data highlights how airline choice, day of the week, regional weather, and airport size shape the reliability of air travel during winter months.

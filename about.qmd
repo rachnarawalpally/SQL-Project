@@ -1,0 +1,20 @@
+---
+title: "Project - Background"
+---
+
+This project provides an in-depth SQL analysis of U.S. flight activity for **February 2019**. The accompanying tabs contain a series of visualizations that illustrate flight patterns, delays, and disruptions during that month. All data processing and querying were performed in **MySQL**, and all visualizations were created in **Python**.
+
+The purpose of this project is to demonstrate how to work with **large-scale relational datasets**, write efficient SQL queries, and translate query results into meaningful insights and visual narratives.
+
+**Dataset summary:**
+
+- **Table:** al_perf 
+- **Rows:** 533,176  
+- **Columns:** 110  
+- **Month analyzed:** February 2019  
+
+This dataset captures detailed operational metrics for commercial flights, including schedules, delays, cancellations, airline identifiers, and diverted flight information. Together, these fields enable deep exploration of flight behavior and performance outcomes across the U.S. air travel system.
+
+Data obtained:
+https://www.transtats.bts.gov/Glossary.asp
+

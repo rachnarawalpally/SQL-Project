@@ -1,0 +1,26 @@
+/* Make all text white */
+body, p, li, td, th {
+    color: white !important;
+  }
+  
+  /* Headings */
+  h1, h2, h3, h4, h5, h6 {
+    color: white !important;
+  }
+  
+  /* Quarto sidebar nav text */
+  .sidebar nav a,
+  .sidebar nav .sidebar-item {
+    color: white !important;
+  }
+  
+  /* Table text */
+  table {
+    color: white !important;
+  }
+  
+  /* Code blocks text */
+  pre, code {
+    color: #eeeeee !important;
+  }
+  
